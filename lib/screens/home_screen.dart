@@ -1,6 +1,14 @@
 import 'package:examen_final_jaume/models/pokemon.dart';
+import 'package:examen_final_jaume/screens/new_pokemon_screen.dart';
+import 'package:examen_final_jaume/screens/pokemon_detail_screen.dart';
 import 'package:examen_final_jaume/services/pokemons_service.dart';
 import 'package:flutter/material.dart';
+
+/*
+  *
+  * StatefulWidget ja que necessitem actualitzar la llista de pokemons quan es crei un nou pokemon o s'elegeixi un per esborrar
+  *
+*/
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,27 +24,25 @@ class _HomeScreenState extends State<HomeScreen> {
     _pokemonsFuture = PokemonsService.getPokemons();
   }
 
-/*
   // Refrescar la llista d'usuaris
-  void _refreshUsers() {
+  void _refreshPokemons() {
     setState(() {
-      _usersFuture = UserService.getUsers();
+      _pokemonsFuture = PokemonsService.getPokemons();
     });
   }
 
-  // Esborrar un usuari i refrescar
-  void _deleteUser(String id) async {
-    await UserService.deleteUser(id);
-    _refreshUsers();
+  // Esborrar un pokemon i refrescar
+  void _deletePokemon(int id) async {
+    await PokemonsService.deletePokemon(id);
+    _refreshPokemons();
   }
-  */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Pokemons"),
-        /*
+        
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -46,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(builder: (context) => NewUserScreen()),
               );
-              _refreshUsers();
+              _refreshPokemons();
             },
           ),
         ],
-        */
+        
       ),
       body: FutureBuilder<List<Pokemons>>(
         future: _pokemonsFuture,
@@ -69,14 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 final pokemon = pokemons[index];
                 return ListTile(
                   title: Text(pokemon.nom),
-                  subtitle: Text(pokemon.tipus),
-                  /*
+                  
                   onTap: () {
-                    // Navega a la pantalla de detall de l’usuari
+                    // Navega a la pantalla de detall del pokemon
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UserDetailScreen(user: user),
+                        builder: (context) => PokemonDetailScreen(pokemon: pokemon),
                       ),
                     );
                   },
@@ -84,10 +89,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   trailing: IconButton(
                     icon: Icon(Icons.delete, color: Colors.red),
                     onPressed: () {
-                      _deleteUser(user.id);
+                      _deletePokemon(pokemon.id);
                     },
                   ),
-                  */
                 );
               },
             );
